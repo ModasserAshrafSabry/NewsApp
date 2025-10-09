@@ -40,7 +40,7 @@
             app:layout_constraintBottom_toBottomOf="@id/shadow_view"
             app:layout_constraintStart_toStartOf="@id/shadow_view"
             app:layout_constraintTop_toTopOf="@id/shadow_view"
-            tools:text="hi" />
+            tools:text="hey" />
 
 
         <TextView
