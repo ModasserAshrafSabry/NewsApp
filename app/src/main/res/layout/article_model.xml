@@ -41,10 +41,15 @@
             app:layout_constraintStart_toStartOf="@id/shadow_view"
             app:layout_constraintTop_toTopOf="@id/shadow_view"
 <<<<<<< HEAD
+<<<<<<< HEAD
             tools:text="zaher" />
 =======
             tools:text="tamer Elgayar" />
 >>>>>>> 81b84f1e2ee95ae80a17be0649085db41f4054d9
+=======
+            tools:text="tamer hosney" />
+
+>>>>>>> e6b787fcff7d3a8ffa8aeb2e2f94241c1e6383be
 
 
         <TextView
