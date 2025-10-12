@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
             R.id.logoutBtn -> {
                 startActivity(
-                    Intent (this, CategoryActivity::class.java
+                    Intent (this, SplashActivity::class.java
                     ))
                 true
             }

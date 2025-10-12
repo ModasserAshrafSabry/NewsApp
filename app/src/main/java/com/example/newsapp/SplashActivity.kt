@@ -8,6 +8,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.animation.addListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -24,31 +25,28 @@ class SplashActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
         val logo = binding.image
         val btn = binding.startBtn
         val text = binding.text
 
-        // --- Step 1: Logo animation ---
         logo.scaleX = 0.8f
         logo.scaleY = 0.8f
 
-        // Scale up first (grow slowly)
         val scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 0.8f, 2f)
         val scaleY = ObjectAnimator.ofFloat(logo, "scaleY", 0.8f, 2f)
         scaleX.duration = 1500
         scaleY.duration = 1500
 
-        // Then move up
         val moveUp = ObjectAnimator.ofFloat(logo, "translationY", 0f, -700f)
         moveUp.duration = 1200
         moveUp.interpolator = DecelerateInterpolator()
 
-        // Combine: grow first, then move up
         val logoAnim = AnimatorSet()
         logoAnim.play(scaleX).with(scaleY).before(moveUp)
         logoAnim.start()
 
-        // --- Step 2: Show button & text after logo finishes ---
         logoAnim.addListener(onEnd = {
             btn.apply {
                 alpha = 0f

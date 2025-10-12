@@ -36,7 +36,7 @@
         android:textSize="24sp"
         android:visibility="invisible"
         android:background="@drawable/custom_button"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white" />
 
 
 
