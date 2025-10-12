@@ -68,7 +68,7 @@ class SplashActivity : AppCompatActivity() {
             }
         })
         btn.setOnClickListener {
-           // startActivity(Intent()
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
 
