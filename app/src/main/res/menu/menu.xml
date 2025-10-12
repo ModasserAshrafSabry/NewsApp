@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <item
         android:title="Favorites"
@@ -11,14 +12,11 @@
     <item
         android:title="Settings"
         android:id="@+id/settingsBtn"
+
         />
     <item
         android:title="Logout"
         android:id="@+id/logoutBtn"
-
         />
-
-
-
 
 </menu>

@@ -1,6 +1,11 @@
 package com.example.newsapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -22,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         loadNews()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -29,8 +35,40 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         binding.swipeRefresh.setOnRefreshListener { loadNews() }
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.favouriteBtn -> {
+                startActivity(
+                    Intent (this, FavouritesActivity::class.java
+                    ))
+                true
+            }
+
+            R.id.settingsBtn -> {
+                startActivity(
+                    Intent (this, SettingsActivity::class.java
+                    ))
+                true
+            }
+
+            R.id.logoutBtn -> {
+                startActivity(
+                    Intent (this, CategoryActivity::class.java
+                    ))
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     fun loadNews() {
@@ -45,12 +83,9 @@ class MainActivity : AppCompatActivity() {
         val selectedCountry = prefs.getString("selectedCountry", "us") ?: "us"
 
 
-
-
-
         val selectedCategory = intent.getStringExtra("category") ?: "general"
 
-        c.getNews(selectedCountry  ,selectedCategory ).enqueue(object : Callback<News> {
+        c.getNews(selectedCountry, selectedCategory).enqueue(object : Callback<News> {
             override fun onResponse(call: Call<News?>, response: Response<News?>) {
                 val newsResponse = response.body()
                 val articles = newsResponse?.articles ?: arrayListOf()
