@@ -1,51 +1,66 @@
 package com.example.newsapp
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
-import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class SettingsActivity : AppCompatActivity() {
 
+    private lateinit var btnEgypt: Button
+    private lateinit var btnUSA: Button
+    private lateinit var btnUK: Button
+    private lateinit var btnSave: Button
+    private lateinit var prefs: SharedPreferences
+    private var selectedCountry: String = "us"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val countryGroup = findViewById<RadioGroup>(R.id.countryGroup)
-        val saveButton = findViewById<Button>(R.id.btn_save_country)
+        btnEgypt = findViewById(R.id.btnEgypt)
+        btnUSA = findViewById(R.id.btnUSA)
+        btnUK = findViewById(R.id.btnUK)
+        btnSave = findViewById(R.id.btnSave)
+        prefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
-        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+        selectedCountry = prefs.getString("selectedCountry", "us") ?: "us"
+        highlightSelectedButton()
 
-        val savedCountry = sharedPreferences.getString("selectedCountry", "")
-        if (!savedCountry.isNullOrEmpty()) {
-            when (savedCountry) {
-                "eg" -> countryGroup.check(R.id.rb_egypt)
-                "us" -> countryGroup.check(R.id.rb_usa)
-                "gb" -> countryGroup.check(R.id.rb_uk)
-            }
+        btnEgypt.setOnClickListener {
+            selectedCountry = "eg"
+            highlightSelectedButton()
         }
 
-
-        saveButton.setOnClickListener {
-            val selectedId = countryGroup.checkedRadioButtonId
-            val selectedCountry = when (selectedId) {
-                R.id.rb_egypt -> "eg"
-                R.id.rb_usa -> "us"
-                R.id.rb_uk -> "gb"
-                else -> ""
-            }
-
-            if (selectedCountry.isNotEmpty()) {
-                editor.putString("selectedCountry", selectedCountry)
-                editor.apply()
-                Toast.makeText(this, "Country saved: $selectedCountry", Toast.LENGTH_SHORT).show()
-                finish()
-            } else {
-                Toast.makeText(this, "Please choose a country first!", Toast.LENGTH_SHORT).show()
-            }
+        btnUSA.setOnClickListener {
+            selectedCountry = "us"
+            highlightSelectedButton()
         }
+
+        btnUK.setOnClickListener {
+            selectedCountry = "gb"
+            highlightSelectedButton()
+        }
+
+        btnSave.setOnClickListener {
+            val editor = prefs.edit()
+            editor.putString("selectedCountry", selectedCountry)
+            editor.apply()
+
+            Toast.makeText(this, "✅ Country saved successfully!", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+    }
+
+    private fun highlightSelectedButton() {
+        val defaultColor = Color.parseColor("#1976D2")
+        val selectedColor = Color.parseColor("#64B5F6")
+
+        btnEgypt.background.setTint(if (selectedCountry == "eg") selectedColor else defaultColor)
+        btnUSA.background.setTint(if (selectedCountry == "us") selectedColor else defaultColor)
+        btnUK.background.setTint(if (selectedCountry == "gb") selectedColor else defaultColor)
     }
 }

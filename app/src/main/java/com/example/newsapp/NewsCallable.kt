@@ -14,3 +14,4 @@ interface NewsCallable {
         @Query("pageSize") pageSize: Int = 30
     ): Call<News>
 }
+
