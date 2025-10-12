@@ -54,4 +54,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:3.0.0") //seralizing JSON to Kotlin
     implementation("com.github.bumptech.glide:glide:5.0.5") // Shows images from links
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.airbnb.android:lottie:6.0.0") //animation
 }
