@@ -15,19 +15,22 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-
     lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         loadNews()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         binding.swipeRefresh.setOnRefreshListener { loadNews() }
     }
 
@@ -38,33 +41,31 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val c = retrofit.create(NewsCallable::class.java)
-        c.getNews().enqueue(object : Callback<News> {
-            override fun onResponse(
-                call: Call<News?>,
-                response: Response<News?>
-            ) {
+
+        val prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val selectedCountry = prefs.getString("selectedCountry", "us") ?: "us"
+
+        c.getNews(selectedCountry).enqueue(object : Callback<News> {
+            override fun onResponse(call: Call<News?>, response: Response<News?>) {
                 val newsResponse = response.body()
-                val articles = newsResponse?.articles!!
-                articles.removeAll {
-                    it.title == "[Removed]"
-                }
+                val articles = newsResponse?.articles ?: arrayListOf()
+
+                articles.removeAll { it.title == "[Removed]" }
+
                 showData(articles)
+
                 binding.progressBar.isVisible = false
                 binding.swipeRefresh.isRefreshing = false
             }
 
-            override fun onFailure(
-                call: Call<News?>,
-                t: Throwable
-            ) {
+            override fun onFailure(call: Call<News?>, t: Throwable) {
                 binding.progressBar.isVisible = false
                 binding.swipeRefresh.isRefreshing = false
-
             }
         })
     }
-    fun showData(articles: ArrayList<Article>){
+
+    fun showData(articles: ArrayList<Article>) {
         binding.recyclerView.adapter = NewsAdapter(this, articles)
     }
-
 }
