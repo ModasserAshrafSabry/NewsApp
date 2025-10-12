@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CategoryActivity">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/newsreport"
+        android:scaleType="centerCrop"
+        android:alpha="0.3"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:layout_marginTop="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:spacing="12dp">
+
+            <TextView
+                android:id="@+id/categoryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose Your News Category"
+                android:textColor="?attr/colorOnBackground"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:layout_marginBottom="20dp" />
+
+            <Button
+                android:id="@+id/generalCard"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="GENERAL"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btn_style"
+                app:backgroundTint="@null"/>
+
+            <Button
+                android:id="@+id/businessCard"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="BUSINESS"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btn_style"
+                app:backgroundTint="@null"/>
+
+            <Button
+                android:id="@+id/entertainmentCard"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="ENTERTAINMENT"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btn_style"
+                app:backgroundTint="@null"/>
+
+            <Button
+                android:id="@+id/healthCard"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="HEALTH"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btn_style"
+                app:backgroundTint="@null"/>
+
+            <Button
+                android:id="@+id/scienceCard"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="SCIENCE"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btn_style"
+                app:backgroundTint="@null"/>
+
+            <Button
+                android:id="@+id/sportsCard"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="SPORTS"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btn_style"
+                app:backgroundTint="@null"/>
+
+            <Button
+                android:id="@+id/technologyCard"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="TECHNOLOGY "
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btn_style"
+                app:backgroundTint="@null"
+                />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

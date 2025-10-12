@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         loadNews()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -45,7 +44,13 @@ class MainActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val selectedCountry = prefs.getString("selectedCountry", "us") ?: "us"
 
-        c.getNews(selectedCountry).enqueue(object : Callback<News> {
+
+
+
+
+        val selectedCategory = intent.getStringExtra("category") ?: "general"
+
+        c.getNews(selectedCountry  ,selectedCategory ).enqueue(object : Callback<News> {
             override fun onResponse(call: Call<News?>, response: Response<News?>) {
                 val newsResponse = response.body()
                 val articles = newsResponse?.articles ?: arrayListOf()
