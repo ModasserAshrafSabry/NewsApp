@@ -1,7 +1,6 @@
 package com.example.newsapp
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         binding.swipeRefresh.setOnRefreshListener { loadNews() }
     }
 
-    private fun loadNews() {
+    fun loadNews() {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://newsapi.org")
             .addConverterFactory(GsonConverterFactory.create())
@@ -45,44 +44,33 @@ class MainActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val selectedCountry = prefs.getString("selectedCountry", "us") ?: "us"
 
+
+
+
+
         val selectedCategory = intent.getStringExtra("category") ?: "general"
 
-        binding.progressBar.isVisible = true
-
-        c.getNews(selectedCountry, selectedCategory).enqueue(object : Callback<News> {
+        c.getNews(selectedCountry  ,selectedCategory ).enqueue(object : Callback<News> {
             override fun onResponse(call: Call<News?>, response: Response<News?>) {
-                binding.progressBar.isVisible = false
-                binding.swipeRefresh.isRefreshing = false
-
                 val newsResponse = response.body()
                 val articles = newsResponse?.articles ?: arrayListOf()
 
                 articles.removeAll { it.title == "[Removed]" }
 
-                if (articles.isEmpty()) {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "⚠️ No news available for this country/category.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
                 showData(articles)
+
+                binding.progressBar.isVisible = false
+                binding.swipeRefresh.isRefreshing = false
             }
 
             override fun onFailure(call: Call<News?>, t: Throwable) {
                 binding.progressBar.isVisible = false
                 binding.swipeRefresh.isRefreshing = false
-                Toast.makeText(
-                    this@MainActivity,
-                    "❌ Failed to load news. Check your connection.",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         })
     }
 
-    private fun showData(articles: ArrayList<Article>) {
+    fun showData(articles: ArrayList<Article>) {
         binding.recyclerView.adapter = NewsAdapter(this, articles)
     }
 }
