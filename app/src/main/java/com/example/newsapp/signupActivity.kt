@@ -25,20 +25,16 @@ class signUpActivity : AppCompatActivity() {
             insets
         }
 
-        //بخزن الايميل والباسورد
         binding.nextBtn.setOnClickListener {
             val email = binding.emailEt.text.toString()
             val pass = binding.passEt.text.toString()
-            //بتاكد ان اليوزر مش سايب اي خانه فاضيه
             if (binding.nameEt.text.isEmpty()) binding.nameLy.error = "Enter your name"
             else if (email.isEmpty()) binding.emailLy.error = "Enter your email"
             else if (pass.isEmpty()) binding.passLy.error = "Enter your password"
-            // لو confirm pass مش زي ال pass
             else if (binding.confirmPassEt.text.toString() != pass) binding.passLy.error =
                 "Passwords should match"
             else {
                 val auth = FirebaseAuth.getInstance()
-                //ببعت البيانات ل firebase عشان يخزنها واتاكد ان الايميل مش مستخدم قبل كده
                 auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser //بخزن البيانات

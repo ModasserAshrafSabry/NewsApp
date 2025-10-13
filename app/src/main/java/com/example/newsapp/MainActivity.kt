@@ -1,6 +1,9 @@
 package com.example.newsapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -44,13 +47,9 @@ class MainActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         val selectedCountry = prefs.getString("selectedCountry", "us") ?: "us"
 
-
-
-
-
         val selectedCategory = intent.getStringExtra("category") ?: "general"
 
-        c.getNews(selectedCountry  ,selectedCategory ).enqueue(object : Callback<News> {
+        c.getNews(selectedCountry, selectedCategory).enqueue(object : Callback<News> {
             override fun onResponse(call: Call<News?>, response: Response<News?>) {
                 val newsResponse = response.body()
                 val articles = newsResponse?.articles ?: arrayListOf()
@@ -73,4 +72,27 @@ class MainActivity : AppCompatActivity() {
     fun showData(articles: ArrayList<Article>) {
         binding.recyclerView.adapter = NewsAdapter(this, articles)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.settingsBtn -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.logoutBtn -> {
+                return true
+            }
+            R.id.favouriteBtn -> {
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
+
