@@ -9,9 +9,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import com.example.newsapp.databinding.ActivityLoginBinding
+import com.google.firebase.Firebase
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 lateinit var auth: FirebaseAuth
 
@@ -58,6 +61,18 @@ class LoginActivity : AppCompatActivity(){
                     Toast.makeText(this, "Login failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                 }
             }
+
+        }
+
+        binding.forgetBtn.setOnClickListener {
+            val email=binding.emailEt.text.toString()
+            Firebase.auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "email sent", Toast.LENGTH_SHORT).show()
+
+                    }
+                }
         }
     }
 
