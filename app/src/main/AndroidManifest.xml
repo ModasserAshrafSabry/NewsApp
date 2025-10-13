@@ -14,24 +14,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NewsApp"
         android:usesCleartextTraffic="true">
+
+
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".CategoryActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".FavouritesActivity"/>
         <activity
             android:name=".SettingsActivity"/>
         <activity
-            android:name=".signupActivity"/>
+            android:name=".signUpActivity"/>
         <activity
             android:name=".LoginActivity"/>
 
