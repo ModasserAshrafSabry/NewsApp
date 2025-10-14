@@ -72,7 +72,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showData(articles: ArrayList<Article>) {
-        var favArticles : ArrayList<Article> = ArrayList()
         binding.recyclerView.adapter = NewsAdapter(this, articles)
     }
 
