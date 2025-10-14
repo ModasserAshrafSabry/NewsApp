@@ -71,34 +71,21 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.forgetBtn.setOnClickListener {
-            val email = binding.emailEt.text.toString().trim()
-
+            val email = binding.emailEt.text.toString()
             if (email.isEmpty()) {
-                binding.emailLy.error = "Please enter your email"
+                Toast.makeText(this, "Please enter your email first", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
-            } else {
-                binding.emailLy.error = null // remove error if fixed
             }
-
             Firebase.auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        binding.emailLy.error = null
-                        binding.emailLy.helperText = "Reset email sent!" // optional green text
-                    } else {
-                        binding.emailLy.error = "Error: ${task.exception?.message}"
+                        Toast.makeText(this, "email sent", Toast.LENGTH_SHORT).show()
+
                     }
                 }
         }
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            startActivity(Intent(this, CategoryActivity::class.java))
-            finish()
-        }
-        else {
-            // User not logged in — stay on login page
-            setContentView(R.layout.activity_login)
-        }
+
+
 
 
     }
