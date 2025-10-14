@@ -80,6 +80,10 @@ class LoginActivity : AppCompatActivity(){
                     }
                 }
         }
+        val currentUser=auth.currentUser
+        if(currentUser!=null){
+            startActivity(Intent(this, CategoryActivity::class.java))
+            finish()
     }
 
 
@@ -87,7 +91,8 @@ class LoginActivity : AppCompatActivity(){
 
 
 
-}
+
+}}
 
 
 

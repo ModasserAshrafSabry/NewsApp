@@ -78,9 +78,12 @@ class FavouritesActivity : AppCompatActivity() {
             }
 
             R.id.logoutBtn -> {
+
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
+
                 return true
+
             }
 
             R.id.favouriteBtn -> {
