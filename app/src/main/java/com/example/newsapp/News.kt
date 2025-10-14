@@ -5,6 +5,7 @@ data class News(
 )
 
 data class Article(
+    var id : String = "",
     var title : String="",
     var url : String="",
     var urlToImage : String=""

@@ -13,6 +13,7 @@ import androidx.core.animation.addListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.newsapp.databinding.ActivitySplashBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +41,7 @@ class SplashActivity : AppCompatActivity() {
         scaleY.duration = 1500
 
         val moveUp = ObjectAnimator.ofFloat(logo, "translationY", 0f, -700f)
-        moveUp.duration = 700
+        moveUp.duration = 1200
         moveUp.interpolator = DecelerateInterpolator()
 
         val logoAnim = AnimatorSet()
@@ -65,8 +66,16 @@ class SplashActivity : AppCompatActivity() {
                     .start()
             }
         })
-        btn.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
+        btn.setOnClickListener {val auth = FirebaseAuth.getInstance()
+            val currentUser = auth.currentUser
+
+            if (currentUser != null) {
+                startActivity(Intent(this, CategoryActivity::class.java))
+            } else {
+                startActivity(Intent(this, LoginActivity::class.java))
+            }
+            finish()
+
         }
 
 
