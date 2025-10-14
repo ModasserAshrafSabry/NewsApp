@@ -34,6 +34,8 @@ class LoginActivity : AppCompatActivity(){
         auth = FirebaseAuth.getInstance()
 
 
+
+
         binding.singnupTxt.setOnClickListener {
             startActivity(Intent(this, signUpActivity::class.java))
         }
@@ -66,6 +68,10 @@ class LoginActivity : AppCompatActivity(){
 
         binding.forgetBtn.setOnClickListener {
             val email=binding.emailEt.text.toString()
+            if (email.isEmpty()) {
+                Toast.makeText(this, "Please enter your email first", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             Firebase.auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -74,6 +80,10 @@ class LoginActivity : AppCompatActivity(){
                     }
                 }
         }
+        val currentUser=auth.currentUser
+        if(currentUser!=null){
+            startActivity(Intent(this, CategoryActivity::class.java))
+            finish()
     }
 
 
@@ -81,7 +91,8 @@ class LoginActivity : AppCompatActivity(){
 
 
 
-}
+
+}}
 
 
 
