@@ -1,4 +1,3 @@
-
 package com.example.newsapp
 
 
@@ -18,7 +17,7 @@ import com.google.firebase.auth.auth
 
 lateinit var auth: FirebaseAuth
 
-class LoginActivity : AppCompatActivity(){
+class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -45,7 +44,7 @@ class LoginActivity : AppCompatActivity(){
             val email = binding.emailEt.text.toString()
             val pass = binding.passEt.text.toString()
 
-            if(email.isEmpty() || pass.isEmpty()) {
+            if (email.isEmpty() || pass.isEmpty()) {
                 Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
             }
             //هنا بنبعت ل فاير بيز الاميل والباسورد وبنشوف هل العمليه نجحت ولا لا
@@ -56,43 +55,54 @@ class LoginActivity : AppCompatActivity(){
                         startActivity(Intent(this, CategoryActivity::class.java))
                         finish()  //لو اليوزر عامل تاكيد للايميل والبيانات بتاعته اتبعتت فعلا هيخش علي ال category
                     } else { //لو مش عامل تاكيد هبعتله ياكد
-                        Toast.makeText(this, "Please verify your email first", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Please verify your email first", Toast.LENGTH_LONG)
+                            .show()
                         auth.signOut()
                     }
                 } else { // لو حصل اي مشكله بنبعتله رساله بالمشكله اللي حصلت
-                    Toast.makeText(this, "Login failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Login failed: ${task.exception?.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
 
         }
 
         binding.forgetBtn.setOnClickListener {
-            val email=binding.emailEt.text.toString()
+            val email = binding.emailEt.text.toString().trim()
+
             if (email.isEmpty()) {
-                Toast.makeText(this, "Please enter your email first", Toast.LENGTH_SHORT).show()
+                binding.emailLy.error = "Please enter your email"
                 return@setOnClickListener
+            } else {
+                binding.emailLy.error = null // remove error if fixed
             }
+
             Firebase.auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this, "email sent", Toast.LENGTH_SHORT).show()
-
+                        binding.emailLy.error = null
+                        binding.emailLy.helperText = "Reset email sent!" // optional green text
+                    } else {
+                        binding.emailLy.error = "Error: ${task.exception?.message}"
                     }
                 }
         }
-        val currentUser=auth.currentUser
-        if(currentUser!=null){
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
             startActivity(Intent(this, CategoryActivity::class.java))
             finish()
+        }
+        else {
+            // User not logged in — stay on login page
+            setContentView(R.layout.activity_login)
+        }
+
+
     }
-
-
-
-
-
-
-
-}}
+}
 
 
 
