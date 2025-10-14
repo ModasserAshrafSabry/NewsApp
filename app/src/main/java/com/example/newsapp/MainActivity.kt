@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+
         loadNews()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -70,6 +72,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showData(articles: ArrayList<Article>) {
+        var favArticles : ArrayList<Article> = ArrayList()
         binding.recyclerView.adapter = NewsAdapter(this, articles)
     }
 
@@ -86,13 +89,16 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.logoutBtn -> {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
                 return true
             }
             R.id.favouriteBtn -> {
+                val intent = Intent(this, FavouritesActivity::class.java)
+                startActivity(intent)
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
-    }
+       }
 }
-
