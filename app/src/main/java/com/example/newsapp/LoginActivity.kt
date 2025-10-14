@@ -90,15 +90,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
         }
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            startActivity(Intent(this, CategoryActivity::class.java))
-            finish()
-        }
-        else {
-            // User not logged in — stay on login page
-            setContentView(R.layout.activity_login)
-        }
+
 
 
     }
