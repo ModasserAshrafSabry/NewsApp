@@ -71,20 +71,25 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.forgetBtn.setOnClickListener {
-            val email = binding.emailEt.text.toString()
+            val email = binding.emailEt.text.toString().trim()
+
             if (email.isEmpty()) {
-                Toast.makeText(this, "Please enter your email first", Toast.LENGTH_SHORT).show()
+                binding.emailLy.error = "Please enter your email"
                 return@setOnClickListener
+            } else {
+                binding.emailLy.error = null // remove error if fixed
             }
+
             Firebase.auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this, "email sent", Toast.LENGTH_SHORT).show()
-
+                        binding.emailLy.error = null
+                        binding.emailLy.helperText = "Reset email sent!" // optional green text
+                    } else {
+                        binding.emailLy.error = "Error: ${task.exception?.message}"
                     }
                 }
         }
-
 
 
 

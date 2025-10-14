@@ -41,7 +41,7 @@ class SplashActivity : AppCompatActivity() {
         scaleY.duration = 1500
 
         val moveUp = ObjectAnimator.ofFloat(logo, "translationY", 0f, -700f)
-        moveUp.duration = 700
+        moveUp.duration = 1200
         moveUp.interpolator = DecelerateInterpolator()
 
         val logoAnim = AnimatorSet()
