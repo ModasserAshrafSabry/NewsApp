@@ -1,5 +1,6 @@
 package com.example.newsapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -10,57 +11,69 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.newsapp.databinding.ActivityFavouritesBinding
+<<<<<<< HEAD
 import com.example.newsapp.databinding.ActivityMainBinding
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 
+=======
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+>>>>>>> 248c06628a797c80e4753a8ec5d222cffca750d0
 
 class FavouritesActivity : AppCompatActivity() {
-    lateinit var binding: ActivityFavouritesBinding
-    val db = Firebase.firestore
-    val favNews = db.collection("NewsDB")
 
+    private lateinit var binding: ActivityFavouritesBinding
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+    private val prefs by lazy { getSharedPreferences("FavoritesPrefs", Context.MODE_PRIVATE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityFavouritesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        setSupportActionBar(binding.tooLbar)
 
+        setSupportActionBar(binding.tooLbar)
         loadFavArticles()
     }
 
+    private fun loadFavArticles() {
+        val userId = auth.currentUser?.uid ?: "guest"
+        val userFavorites = db.collection("users").document(userId).collection("favorites")
 
-    fun loadFavArticles() {
-        favNews.get().addOnSuccessListener {
-            queryDocumentSnapshots ->
+        userFavorites.get().addOnSuccessListener { querySnapshot ->
             val favArticles = ArrayList<Article>()
+            val favoritesSet = mutableSetOf<String>()
 
-            for(article in queryDocumentSnapshots){
-                val favArticle = article.toObject(Article::class.java)
-                favArticles.add(favArticle)
+            for (doc in querySnapshot) {
+                val article = doc.toObject(Article::class.java)
+                favArticles.add(article)
+                article.url?.let { favoritesSet.add(it) }
             }
-           if(favArticles.isNotEmpty()){
-               showData(favArticles)
-               Toast.makeText(this
-                   , "Data Loaded successfully", Toast.LENGTH_SHORT).show()
 
-           }
-            else {
-               Toast.makeText(this, "NO FAVOURITES", Toast.LENGTH_SHORT).show()}
+            prefs.edit().putStringSet("favorites", favoritesSet).apply()
+
+            if (favArticles.isNotEmpty()) {
+                showData(favArticles)
+                Toast.makeText(this, "Favorites loaded successfully ❤️", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No favorites found", Toast.LENGTH_SHORT).show()
             }
-            .addOnFailureListener { Toast.makeText(this
-                , "Error", Toast.LENGTH_SHORT).show() }
 
+        }.addOnFailureListener {
+            Toast.makeText(this, "Error loading favorites", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    fun showData(articles: ArrayList<Article>) {
+    private fun showData(articles: ArrayList<Article>) {
         binding.recycleRView.adapter = NewsAdapter(this, articles)
     }
 
@@ -72,19 +85,26 @@ class FavouritesActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.settingsBtn -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
+                startActivity(Intent(this, SettingsActivity::class.java))
                 return true
             }
 
             R.id.logoutBtn -> {
+<<<<<<< HEAD
+                FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
+                Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+=======
+                startActivity(Intent(this, LoginActivity::class.java))
+>>>>>>> 248c06628a797c80e4753a8ec5d222cffca750d0
                 return true
             }
 
+
             R.id.favouriteBtn -> {
-                Toast.makeText(this, "You are already in Favourites", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "You are already in Favorites", Toast.LENGTH_SHORT).show()
                 return true
             }
         }
