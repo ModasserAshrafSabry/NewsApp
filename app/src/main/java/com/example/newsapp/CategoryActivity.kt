@@ -25,6 +25,9 @@ class CategoryActivity : AppCompatActivity() {
     }
 
 
+
+
+
     private fun openNews(category: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("category", category)
