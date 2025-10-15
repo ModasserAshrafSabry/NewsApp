@@ -16,45 +16,32 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.net.URLEncoder
 
-class NewsAdapter(
-    private val activity: Activity,
-    private val articles: ArrayList<Article>
-) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class NewsAdapter(val activity: Activity, val articles: ArrayList<Article>) :
+    RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
-    private val prefs = activity.getSharedPreferences("FavoritesPrefs", Activity.MODE_PRIVATE)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
-        val binding = ArticleModelBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return NewsViewHolder(binding)
+        val bind = ArticleModelBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return NewsViewHolder(bind)
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val article = articles[position]
         val userId = auth.currentUser?.uid ?: "guest"
         val articleUrl = article.url ?: return
-
-        // Safely encode the URL for Firebase document ID
         val safeId = URLEncoder.encode(articleUrl, "UTF-8")
 
-        // Check favorite status locally
-        val isFavorite = prefs.getBoolean(safeId, false)
-
-        // Set title and image
         holder.binding.articleTitle.text = article.title
+
         Glide.with(holder.binding.articleImage.context)
             .load(article.urlToImage)
             .error(R.drawable.broken_image)
             .transition(DrawableTransitionOptions.withCrossFade(1000))
             .into(holder.binding.articleImage)
 
-        // Set correct heart icon
-        holder.binding.favouriteButton.setImageResource(
-            if (isFavorite) R.drawable.filled_favorite else R.drawable.favorite_border
-        )
-
-        // Open article
+        // Open article on click
         holder.binding.articleCard.setOnClickListener {
             activity.startActivity(Intent(Intent.ACTION_VIEW, articleUrl.toUri()))
         }
@@ -68,70 +55,60 @@ class NewsAdapter(
                 .startChooser()
         }
 
-        // Handle favorite toggle
+        // Handle favourites
         holder.binding.favouriteButton.setOnClickListener {
-            val editor = prefs.edit()
-
-            if (!isFavorite) {
-                // Add to favorites
-                db.collection("users")
-                    .document(userId)
-                    .collection("favorites")
-                    .document(safeId)
-                    .set(article)
-                    .addOnSuccessListener {
-                        editor.putBoolean(safeId, true).apply()
-                        holder.binding.favouriteButton.setImageResource(R.drawable.filled_favorite)
-                        Toast.makeText(activity, "Added to favorites ❤️", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(activity, "Failed to add!", Toast.LENGTH_SHORT).show()
-                    }
-            } else {
-                // Remove from favorites (with confirmation if in FavouritesActivity)
-                if (activity is FavouritesActivity) {
-                    AlertDialog.Builder(activity)
-                        .setTitle("Remove Favorite")
-                        .setMessage("Are you sure you want to remove this article?")
-                        .setPositiveButton("Yes") { _, _ ->
-                            removeFavorite(userId, safeId, editor, holder, position)
+            if (activity is MainActivity) {
+                db.collection("users").document(userId)
+                    .collection("favorites").document(safeId)
+                    .get()
+                    .addOnSuccessListener { doc ->
+                        if (doc.exists()) {
+                            // Remove from favorites
+                            db.collection("users").document(userId)
+                                .collection("favorites").document(safeId)
+                                .delete()
+                                .addOnSuccessListener {
+                                    holder.binding.favouriteButton.setImageResource(R.drawable.favorite_border)
+                                    Toast.makeText(activity, "Removed from favorites 💔", Toast.LENGTH_SHORT).show()
+                                }
+                        } else {
+                            // Add to favorites
+                            db.collection("users").document(userId)
+                                .collection("favorites").document(safeId)
+                                .set(article)
+                                .addOnSuccessListener {
+                                    holder.binding.favouriteButton.setImageResource(R.drawable.filled_favorite)
+                                    Toast.makeText(activity, "Added to favorites ❤️", Toast.LENGTH_SHORT).show()
+                                }
                         }
-                        .setNegativeButton("No", null)
-                        .show()
-                } else {
-                    removeFavorite(userId, safeId, editor, holder, position)
-                }
+                    }
+
+            } else if (activity is FavouritesActivity) {
+                val builder = AlertDialog.Builder(activity)
+                    .setTitle("Alert")
+                    .setMessage("Remove this article from favourites?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        db.collection("users").document(userId)
+                            .collection("favorites").document(safeId)
+                            .delete()
+                            .addOnSuccessListener {
+                                Toast.makeText(activity, "Removed successfully!", Toast.LENGTH_SHORT).show()
+                                articles.removeAt(position)
+                                notifyItemRemoved(position)
+                                notifyItemRangeChanged(position, articles.size)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(activity, "Error while Removing", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                    .setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
+                builder.create().show()
             }
         }
     }
 
-    private fun removeFavorite(
-        userId: String,
-        safeId: String,
-        editor: android.content.SharedPreferences.Editor,
-        holder: NewsViewHolder,
-        position: Int
-    ) {
-        db.collection("users").document(userId)
-            .collection("favorites").document(safeId)
-            .delete()
-            .addOnSuccessListener {
-                editor.remove(safeId).apply()
-                holder.binding.favouriteButton.setImageResource(R.drawable.favorite_border)
-                Toast.makeText(activity, "Removed from favorites 💔", Toast.LENGTH_SHORT).show()
-
-                if (activity is FavouritesActivity) {
-                    articles.removeAt(position)
-                    notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, articles.size)
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(activity, "Failed to remove!", Toast.LENGTH_SHORT).show()
-            }
-    }
-
     override fun getItemCount() = articles.size
 
-    class NewsViewHolder(val binding: ArticleModelBinding) : RecyclerView.ViewHolder(binding.root)
+    class NewsViewHolder(val binding: ArticleModelBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }
