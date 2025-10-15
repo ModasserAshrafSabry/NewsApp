@@ -39,17 +39,18 @@ class NewsAdapter(val activity: Activity, val articles: ArrayList<Article>) :
         holder: NewsViewHolder,
         position: Int
     ) {
-        holder.binding.articleTitle.text = articles[position].title
+        val article = articles[position]
+        holder.binding.articleTitle.text = article.title
         Glide
             .with(holder.binding.articleImage.context)
-            .load(articles[position].urlToImage)
+            .load(article.urlToImage)
             .error(R.drawable.broken_image)
             .transition(DrawableTransitionOptions.withCrossFade(1000))
             .into(holder.binding.articleImage)
 
         holder.binding.articleCard.setOnClickListener {
             activity.startActivity(
-                Intent(Intent.ACTION_VIEW, articles[position].url.toUri())
+                Intent(Intent.ACTION_VIEW, article.url.toUri())
             )
         }
 
@@ -58,68 +59,67 @@ class NewsAdapter(val activity: Activity, val articles: ArrayList<Article>) :
                 .IntentBuilder(activity)
                 .setType("text/plain")
                 .setChooserTitle("Share Article With: ")
-                .setText(articles[position].url)
+                .setText(article.url)
                 .startChooser()
         }
 
-        holder.binding.favouriteButton.tag = R.drawable.favorite_border
+        var isFavorite = false
+        holder.binding.favouriteButton.setImageResource(R.drawable.favorite_border)
 
         holder.binding.favouriteButton.setOnClickListener {
             if (activity is MainActivity) {
-                if (holder.binding.favouriteButton.tag == R.drawable.favorite_border) {
-
-                    db.collection("NewsDB").add(articles[position])
+                if (!isFavorite) {
+                    db.collection("NewsDB").add(article)
                         .addOnSuccessListener { documentReference ->
-                            articles[position].id = documentReference.id
-
-                            documentReference.update("id", articles[position].id)
-
+                            article.id = documentReference.id
+                            documentReference.update("id", article.id)
                             holder.binding.favouriteButton.setImageResource(R.drawable.filled_favorite)
-                            holder.binding.favouriteButton.tag = R.drawable.filled_favorite
-                            Toast.makeText(this.activity, "liked!", Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show()
-                        }
-
-                }else {
-                    holder.binding.favouriteButton.setImageResource(R.drawable.favorite_border)
-                    holder.binding.favouriteButton.tag = R.drawable.favorite_border
-                }
-
-                }   else if (activity is FavouritesActivity) {
-            val builder = AlertDialog.Builder(activity)
-                .setTitle("Alert")
-                .setMessage("Remove this article from favourites?")
-                .setPositiveButton("Yes") { _, _ ->
-                    db.collection("NewsDB").document(articles[position].id).delete()
-                        .addOnSuccessListener {
-                            Toast.makeText(
-                                activity,
-                                "Removed successfully!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            articles.removeAt(position)
-                            notifyItemRemoved(position)
-                            notifyItemRangeChanged(position, articles.size)
+                            isFavorite = true
+                            Toast.makeText(activity, "Liked!", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener {
                             Toast.makeText(
                                 activity,
-                                "Error while Removing",
+                                "Failed to add to favorites",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+                } else {
+                    Toast.makeText(activity, "Already in favorites!", Toast.LENGTH_SHORT).show()
+                }
 
-                }
-                .setNegativeButton("No") { dialog, _ ->
-                    dialog.dismiss()
-                }
-            builder.create().show()
-                }
+            } else if (activity is FavouritesActivity) {
+                val builder = AlertDialog.Builder(activity)
+                    .setTitle("Alert")
+                    .setMessage("Remove this article from favourites?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        db.collection("NewsDB").document(article.id).delete()
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    activity,
+                                    "Removed successfully!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                articles.removeAt(position)
+                                notifyItemRemoved(position)
+                                notifyItemRangeChanged(position, articles.size)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    activity,
+                                    "Error while Removing",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                builder.create().show()
             }
-
         }
+    }
 
     override fun getItemCount() = articles.size
     class NewsViewHolder(val binding: ArticleModelBinding) : RecyclerView.ViewHolder(binding.root)
