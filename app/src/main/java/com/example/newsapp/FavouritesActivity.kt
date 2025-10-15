@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.databinding.ActivityFavouritesBinding
 
 import com.example.newsapp.databinding.ActivityMainBinding
@@ -45,34 +46,43 @@ class FavouritesActivity : AppCompatActivity() {
     }
 
     private fun loadFavArticles() {
-        val userId = auth.currentUser?.uid ?: "guest"
-        val userFavorites = db.collection("users").document(userId).collection("favorites")
-
-        userFavorites.get().addOnSuccessListener { querySnapshot ->
-            val favArticles = ArrayList<Article>()
-            val favoritesSet = mutableSetOf<String>()
-
-            for (doc in querySnapshot) {
-                val article = doc.toObject(Article::class.java)
-                favArticles.add(article)
-                article.url?.let { favoritesSet.add(it) }
-            }
-
-            prefs.edit().putStringSet("favorites", favoritesSet).apply()
-
-            if (favArticles.isNotEmpty()) {
-                showData(favArticles)
-                Toast.makeText(this, "Favorites loaded successfully ❤️", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "No favorites found", Toast.LENGTH_SHORT).show()
-            }
-
-        }.addOnFailureListener {
-            Toast.makeText(this, "Error loading favorites", Toast.LENGTH_SHORT).show()
+        val user = auth.currentUser
+        if (user == null) {
+            Toast.makeText(this, "Please log in to view favorites", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        val userFavorites = db.collection("users").document(user.uid).collection("favorites")
+
+        userFavorites.get()
+            .addOnSuccessListener { querySnapshot ->
+                val favArticles = ArrayList<Article>()
+                val favoritesSet = mutableSetOf<String>()
+
+                for (doc in querySnapshot) {
+                    val article = doc.toObject(Article::class.java)
+                    favArticles.add(article)
+                    article.url?.let { favoritesSet.add(it) }
+                }
+
+                prefs.edit().putStringSet("favorites", favoritesSet).apply()
+
+                if (favArticles.isNotEmpty()) {
+                    binding.recycleRView.layoutManager = LinearLayoutManager(this)
+                    binding.recycleRView.adapter = NewsAdapter(this, favArticles)
+                    Toast.makeText(this, "Favorites loaded successfully ❤️", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "No favorites found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error loading favorites", Toast.LENGTH_SHORT).show()
+            }
     }
 
+
     private fun showData(articles: ArrayList<Article>) {
+        binding.recycleRView.layoutManager = LinearLayoutManager(this)
         binding.recycleRView.adapter = NewsAdapter(this, articles)
     }
 
