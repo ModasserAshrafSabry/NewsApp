@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
                 } else { // لو حصل اي مشكله بنبعتله رساله بالمشكله اللي حصلت
                     Toast.makeText(
                         this,
-                        "Login failed: ${task.exception?.message}",
+                        "Login failed:Please check your email and password",
                         Toast.LENGTH_LONG
                     ).show()
                 }
