@@ -52,7 +52,9 @@ class SettingsActivity : AppCompatActivity() {
             editor.putString("selectedCountry", selectedCountry)
             editor.apply()
             Toast.makeText(this, "✅ Country saved successfully!", Toast.LENGTH_SHORT).show()
+            setResult(RESULT_OK)
             finish()
+
         }
     }
 

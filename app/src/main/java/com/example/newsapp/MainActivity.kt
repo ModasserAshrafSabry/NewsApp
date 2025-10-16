@@ -89,22 +89,27 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.settingsBtn -> {
                 val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
+                startActivityForResult(intent, 100)
                 return true
             }
 
             R.id.logoutBtn -> {
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
+                startActivity(Intent(this, LoginActivity::class.java))
                 return true
             }
 
             R.id.favouriteBtn -> {
-                val intent = Intent(this, FavouritesActivity::class.java)
-                startActivity(intent)
+                startActivity(Intent(this, FavouritesActivity::class.java))
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100) {
+            loadNews()
+        }
     }
 }
