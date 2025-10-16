@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     fun loadNews() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://newsapi.org")
+            .baseUrl("https://newsapi.org/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
