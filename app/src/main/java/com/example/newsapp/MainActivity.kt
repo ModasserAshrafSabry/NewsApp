@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        loadNews()
         binding.swipeRefresh.setOnRefreshListener {
             Toast.makeText(this, "You are Up To Date!", Toast.LENGTH_SHORT).show()
             binding.swipeRefresh.isRefreshing = false

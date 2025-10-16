@@ -14,7 +14,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.newsapp.databinding.ArticleModelBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.net.URLEncoder
 
 class NewsAdapter(val activity: Activity, val articles: ArrayList<Article>) :
     RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
@@ -29,9 +28,7 @@ class NewsAdapter(val activity: Activity, val articles: ArrayList<Article>) :
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val article = articles[position]
-        val userId = auth.currentUser?.uid ?: "guest"
         val articleUrl = article.url ?: return
-        val safeId = URLEncoder.encode(articleUrl, "UTF-8")
 
         holder.binding.articleTitle.text = article.title
 
@@ -40,6 +37,17 @@ class NewsAdapter(val activity: Activity, val articles: ArrayList<Article>) :
             .error(R.drawable.broken_image)
             .transition(DrawableTransitionOptions.withCrossFade(1000))
             .into(holder.binding.articleImage)
+
+        db.collection("NewsDB")
+            .whereEqualTo("title", article.title)
+            .get()
+            .addOnSuccessListener { result ->
+                if (!result.isEmpty) {
+                    holder.binding.favouriteButton.setImageResource(R.drawable.filled_favorite)
+                } else {
+                    holder.binding.favouriteButton.setImageResource(R.drawable.favorite_border)
+                }
+            }
 
         holder.binding.articleCard.setOnClickListener {
             activity.startActivity(Intent(Intent.ACTION_VIEW, articleUrl.toUri()))
@@ -55,27 +63,23 @@ class NewsAdapter(val activity: Activity, val articles: ArrayList<Article>) :
 
         holder.binding.favouriteButton.setOnClickListener {
             if (activity is MainActivity) {
-                db.collection("users").document(userId)
-                    .collection("favorites").document(safeId)
+                db.collection("NewsDB")
+                    .whereEqualTo("url", article.url)
                     .get()
-                    .addOnSuccessListener { doc ->
-                        if (doc.exists()) {
-                            // Remove from favorites
-                            db.collection("users").document(userId)
-                                .collection("favorites").document(safeId)
+                    .addOnSuccessListener { result ->
+                        if (result.isEmpty) {
+                            db.collection("NewsDB").add(article)
+                                .addOnSuccessListener {
+                                    holder.binding.favouriteButton.setImageResource(R.drawable.filled_favorite)
+                                    Toast.makeText(activity, "Added to favorites ❤️", Toast.LENGTH_SHORT).show()
+                                }
+                        } else {
+                            val docId = result.documents[0].id
+                            db.collection("NewsDB").document(docId)
                                 .delete()
                                 .addOnSuccessListener {
                                     holder.binding.favouriteButton.setImageResource(R.drawable.favorite_border)
                                     Toast.makeText(activity, "Removed from favorites 💔", Toast.LENGTH_SHORT).show()
-                                }
-                        } else {
-                            // Add to favorites
-                            db.collection("users").document(userId)
-                                .collection("favorites").document(safeId)
-                                .set(article)
-                                .addOnSuccessListener {
-                                    holder.binding.favouriteButton.setImageResource(R.drawable.filled_favorite)
-                                    Toast.makeText(activity, "Added to favorites ❤️", Toast.LENGTH_SHORT).show()
                                 }
                         }
                     }
@@ -85,14 +89,21 @@ class NewsAdapter(val activity: Activity, val articles: ArrayList<Article>) :
                     .setTitle("Alert")
                     .setMessage("Remove this article from favourites?")
                     .setPositiveButton("Yes") { _, _ ->
-                        db.collection("users").document(userId)
-                            .collection("favorites").document(safeId)
-                            .delete()
-                            .addOnSuccessListener {
-                                Toast.makeText(activity, "Removed successfully!", Toast.LENGTH_SHORT).show()
-                                articles.removeAt(position)
-                                notifyItemRemoved(position)
-                                notifyItemRangeChanged(position, articles.size)
+                        db.collection("NewsDB")
+                            .whereEqualTo("url", article.url)
+                            .get()
+                            .addOnSuccessListener { result ->
+                                if (!result.isEmpty) {
+                                    val docId = result.documents[0].id
+                                    db.collection("NewsDB").document(docId)
+                                        .delete()
+                                        .addOnSuccessListener {
+                                            Toast.makeText(activity, "Removed successfully!", Toast.LENGTH_SHORT).show()
+                                            articles.removeAt(position)
+                                            notifyItemRemoved(position)
+                                            notifyItemRangeChanged(position, articles.size)
+                                        }
+                                }
                             }
                             .addOnFailureListener {
                                 Toast.makeText(activity, "Error while Removing", Toast.LENGTH_SHORT).show()
