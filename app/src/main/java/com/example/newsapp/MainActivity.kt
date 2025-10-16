@@ -2,8 +2,10 @@ package com.example.newsapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -51,22 +53,48 @@ class MainActivity : AppCompatActivity() {
 
         val selectedCategory = intent.getStringExtra("category") ?: "general"
 
+        val fullUrl =
+            "https://newsapi.org/v2/top-headlines?country=$selectedCountry&category=$selectedCategory&apiKey=YOUR_API_KEY"
+        Log.d("API_URL", fullUrl)
+
         c.getNews(selectedCountry, selectedCategory).enqueue(object : Callback<News> {
             override fun onResponse(call: Call<News?>, response: Response<News?>) {
+                binding.progressBar.isVisible = false
+                binding.swipeRefresh.isRefreshing = false
+
+                if (!response.isSuccessful) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "❌ Failed to load news (${response.code()})",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+
                 val newsResponse = response.body()
                 val articles = newsResponse?.articles ?: arrayListOf()
 
                 articles.removeAll { it.title == "[Removed]" }
 
-                showData(articles)
+                if (articles.isEmpty()) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "⚠️ No news found for selected country.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
-                binding.progressBar.isVisible = false
-                binding.swipeRefresh.isRefreshing = false
+                showData(articles)
             }
 
             override fun onFailure(call: Call<News?>, t: Throwable) {
                 binding.progressBar.isVisible = false
                 binding.swipeRefresh.isRefreshing = false
+                Toast.makeText(
+                    this@MainActivity,
+                    "❌ Error: ${t.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
@@ -89,11 +117,13 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
+
             R.id.logoutBtn -> {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 return true
             }
+
             R.id.favouriteBtn -> {
                 val intent = Intent(this, FavouritesActivity::class.java)
                 startActivity(intent)
@@ -101,5 +131,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-       }
+    }
 }
