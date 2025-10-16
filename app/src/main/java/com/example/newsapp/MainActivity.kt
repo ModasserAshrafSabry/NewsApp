@@ -72,7 +72,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showData(articles: ArrayList<Article>) {
-        binding.recyclerView.adapter = NewsAdapter(this, articles)
+        val adapter = NewsAdapter(this, articles)
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.scrollToPosition(0)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
