@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity() {
 
                 binding.progressBar.isVisible = false
                 binding.swipeRefresh.isRefreshing = false
+              
             }
 
             override fun onFailure(call: Call<News?>, t: Throwable) {
@@ -78,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = NewsAdapter(this, articles)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.scrollToPosition(0)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
