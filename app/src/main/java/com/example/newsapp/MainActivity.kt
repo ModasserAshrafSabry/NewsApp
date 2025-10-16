@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -34,8 +35,11 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        binding.swipeRefresh.setOnRefreshListener { loadNews() }
+        loadNews()
+        binding.swipeRefresh.setOnRefreshListener {
+            Toast.makeText(this, "You are Up To Date!", Toast.LENGTH_SHORT).show()
+            binding.swipeRefresh.isRefreshing = false
+        }
     }
 
     fun loadNews() {
@@ -89,11 +93,13 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
+
             R.id.logoutBtn -> {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 return true
             }
+
             R.id.favouriteBtn -> {
                 val intent = Intent(this, FavouritesActivity::class.java)
                 startActivity(intent)
@@ -101,5 +107,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-       }
+    }
 }

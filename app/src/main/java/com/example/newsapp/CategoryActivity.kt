@@ -24,10 +24,6 @@ class CategoryActivity : AppCompatActivity() {
         binding.technologyCard.setOnClickListener { openNews("technology") }
     }
 
-
-
-
-
     private fun openNews(category: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("category", category)
