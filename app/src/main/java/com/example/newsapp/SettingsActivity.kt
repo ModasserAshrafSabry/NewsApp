@@ -13,6 +13,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var btnEgypt: Button
     private lateinit var btnUSA: Button
     private lateinit var btnUK: Button
+    private lateinit var btnCanada: Button
+    private lateinit var btnIndia: Button
     private lateinit var btnSave: Button
     private lateinit var prefs: SharedPreferences
     private var selectedCountry: String = "us"
@@ -24,6 +26,8 @@ class SettingsActivity : AppCompatActivity() {
         btnEgypt = findViewById(R.id.btnEgypt)
         btnUSA = findViewById(R.id.btnUSA)
         btnUK = findViewById(R.id.btnUK)
+        btnCanada = findViewById(R.id.btnCanada)
+        btnIndia = findViewById(R.id.btnIndia)
         btnSave = findViewById(R.id.btnSave)
         prefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
@@ -45,6 +49,16 @@ class SettingsActivity : AppCompatActivity() {
             highlightSelectedButton()
         }
 
+        btnCanada.setOnClickListener {
+            selectedCountry = "ca"
+            highlightSelectedButton()
+        }
+
+        btnIndia.setOnClickListener {
+            selectedCountry = "in"
+            highlightSelectedButton()
+        }
+
         btnSave.setOnClickListener {
             val editor = prefs.edit()
             editor.putString("selectedCountry", selectedCountry)
@@ -62,5 +76,8 @@ class SettingsActivity : AppCompatActivity() {
         btnEgypt.background.setTint(if (selectedCountry == "eg") selectedColor else defaultColor)
         btnUSA.background.setTint(if (selectedCountry == "us") selectedColor else defaultColor)
         btnUK.background.setTint(if (selectedCountry == "gb") selectedColor else defaultColor)
+        btnCanada.background.setTint(if (selectedCountry == "ca") selectedColor else defaultColor)
+        btnIndia.background.setTint(if (selectedCountry == "in") selectedColor else defaultColor)
     }
 }
+

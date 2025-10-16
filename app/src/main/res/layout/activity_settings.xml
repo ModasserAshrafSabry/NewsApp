@@ -48,7 +48,6 @@
                 app:backgroundTint="@null"
                 android:layout_marginTop="12dp" />
 
-
             <Button
                 android:id="@+id/btnUSA"
                 android:layout_width="match_parent"
@@ -64,10 +63,32 @@
                 android:id="@+id/btnUK"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:background="@drawable/btn_style"
                 android:text="UK 🇬🇧"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
+                android:background="@drawable/btn_style"
+                app:backgroundTint="@null"
+                android:layout_marginTop="12dp" />
+
+            <Button
+                android:id="@+id/btnCanada"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:text="CANADA 🇨🇦"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btn_style"
+                app:backgroundTint="@null"
+                android:layout_marginTop="12dp" />
+
+            <Button
+                android:id="@+id/btnIndia"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:text="INDIA 🇮🇳"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btn_style"
                 app:backgroundTint="@null"
                 android:layout_marginTop="12dp" />
 
@@ -75,7 +96,7 @@
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:text="SAVE "
+                android:text="SAVE"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 android:background="@drawable/btn_save_style"
@@ -84,4 +105,6 @@
 
         </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>
+
