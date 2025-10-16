@@ -13,8 +13,10 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var btnEgypt: Button
     private lateinit var btnUSA: Button
     private lateinit var btnUK: Button
-    private lateinit var btnCanada: Button
     private lateinit var btnIndia: Button
+    private lateinit var btnCanada: Button
+    private lateinit var btnFrance: Button
+    private lateinit var btnGermany: Button
     private lateinit var btnSave: Button
     private lateinit var prefs: SharedPreferences
     private var selectedCountry: String = "us"
@@ -26,44 +28,29 @@ class SettingsActivity : AppCompatActivity() {
         btnEgypt = findViewById(R.id.btnEgypt)
         btnUSA = findViewById(R.id.btnUSA)
         btnUK = findViewById(R.id.btnUK)
-        btnCanada = findViewById(R.id.btnCanada)
         btnIndia = findViewById(R.id.btnIndia)
+        btnCanada = findViewById(R.id.btnCanada)
+        btnFrance = findViewById(R.id.btnFrance)
+        btnGermany = findViewById(R.id.btnGermany)
         btnSave = findViewById(R.id.btnSave)
+
         prefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
         selectedCountry = prefs.getString("selectedCountry", "us") ?: "us"
         highlightSelectedButton()
 
-        btnEgypt.setOnClickListener {
-            selectedCountry = "eg"
-            highlightSelectedButton()
-        }
-
-        btnUSA.setOnClickListener {
-            selectedCountry = "us"
-            highlightSelectedButton()
-        }
-
-        btnUK.setOnClickListener {
-            selectedCountry = "gb"
-            highlightSelectedButton()
-        }
-
-        btnCanada.setOnClickListener {
-            selectedCountry = "ca"
-            highlightSelectedButton()
-        }
-
-        btnIndia.setOnClickListener {
-            selectedCountry = "in"
-            highlightSelectedButton()
-        }
+        btnEgypt.setOnClickListener { selectedCountry = "eg"; highlightSelectedButton() }
+        btnUSA.setOnClickListener { selectedCountry = "us"; highlightSelectedButton() }
+        btnUK.setOnClickListener { selectedCountry = "gb"; highlightSelectedButton() }
+        btnIndia.setOnClickListener { selectedCountry = "in"; highlightSelectedButton() }
+        btnCanada.setOnClickListener { selectedCountry = "ca"; highlightSelectedButton() }
+        btnFrance.setOnClickListener { selectedCountry = "fr"; highlightSelectedButton() }
+        btnGermany.setOnClickListener { selectedCountry = "de"; highlightSelectedButton() }
 
         btnSave.setOnClickListener {
             val editor = prefs.edit()
             editor.putString("selectedCountry", selectedCountry)
             editor.apply()
-
             Toast.makeText(this, "✅ Country saved successfully!", Toast.LENGTH_SHORT).show()
             finish()
         }
@@ -76,8 +63,10 @@ class SettingsActivity : AppCompatActivity() {
         btnEgypt.background.setTint(if (selectedCountry == "eg") selectedColor else defaultColor)
         btnUSA.background.setTint(if (selectedCountry == "us") selectedColor else defaultColor)
         btnUK.background.setTint(if (selectedCountry == "gb") selectedColor else defaultColor)
-        btnCanada.background.setTint(if (selectedCountry == "ca") selectedColor else defaultColor)
         btnIndia.background.setTint(if (selectedCountry == "in") selectedColor else defaultColor)
+        btnCanada.background.setTint(if (selectedCountry == "ca") selectedColor else defaultColor)
+        btnFrance.background.setTint(if (selectedCountry == "fr") selectedColor else defaultColor)
+        btnGermany.background.setTint(if (selectedCountry == "de") selectedColor else defaultColor)
     }
 }
 
