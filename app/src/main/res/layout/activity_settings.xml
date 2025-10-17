@@ -11,120 +11,107 @@
         android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/newsreport"
+        android:alpha="0.28"
         android:scaleType="centerCrop"
-        android:alpha="0.28" />
+        android:src="@drawable/newsreport" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="24dp"
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:fontFamily="@font/splashy_bold"
                 android:text="Choose Your Country"
                 android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:textSize="22sp"
-                android:layout_marginBottom="18dp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnEgypt"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:text="EGYPT 🇪🇬"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:background="@drawable/btn_style"
-                app:backgroundTint="@null"
-                android:layout_marginTop="12dp" />
 
             <Button
                 android:id="@+id/btnUSA"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_style"
+                android:fontFamily="@font/splashy_bold"
                 android:text="USA 🇺🇸"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/btnEgypt"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/btn_style"
-                app:backgroundTint="@null"
-                android:layout_marginTop="12dp" />
+                android:fontFamily="@font/splashy_bold"
+                android:text="EGYPT 🇪🇬"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
 
             <Button
                 android:id="@+id/btnUK"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:text="UK 🇬🇧"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_style"
+                android:fontFamily="@font/splashy_bold"
+                android:text="United Kingdom 🇬🇧"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                android:background="@drawable/btn_style"
-                app:backgroundTint="@null"
-                android:layout_marginTop="12dp" />
+                app:backgroundTint="@null" />
 
             <Button
                 android:id="@+id/btnCanada"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_style"
+                android:fontFamily="@font/splashy_bold"
                 android:text="CANADA 🇨🇦"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                android:background="@drawable/btn_style"
-                app:backgroundTint="@null"
-                android:layout_marginTop="12dp" />
+                app:backgroundTint="@null" />
 
-            <Button
-                android:id="@+id/btnIndia"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:text="INDIA 🇮🇳"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:background="@drawable/btn_style"
-                app:backgroundTint="@null"
-                android:layout_marginTop="12dp" />
-
-            <Button
-                android:id="@+id/btnFrance"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:text="FRANCE 🇫🇷"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:background="@drawable/btn_style"
-                app:backgroundTint="@null"
-                android:layout_marginTop="12dp" />
 
             <Button
                 android:id="@+id/btnGermany"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_style"
+                android:fontFamily="@font/splashy_bold"
                 android:text="GERMANY 🇩🇪"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                android:background="@drawable/btn_style"
-                app:backgroundTint="@null"
-                android:layout_marginTop="12dp" />
+                app:backgroundTint="@null" />
 
 
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/btn_save_style"
+                android:fontFamily="@font/splashy_bold"
                 android:text="SAVE"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                android:background="@drawable/btn_save_style"
-                app:backgroundTint="@null"
-                android:layout_marginTop="24dp" />
+                app:backgroundTint="@null" />
 
         </LinearLayout>
     </ScrollView>
