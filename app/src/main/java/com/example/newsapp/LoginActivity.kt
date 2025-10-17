@@ -41,11 +41,12 @@ class LoginActivity : AppCompatActivity() {
 
 
         binding.logBtn.setOnClickListener {
-            val email = binding.emailEt.text.toString()
-            val pass = binding.passEt.text.toString()
+            val email = binding.emailEt.text.toString().trim()
+            val pass = binding.passEt.text.toString().trim()
 
             if (email.isEmpty() || pass.isEmpty()) {
                 Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
             //هنا بنبعت ل فاير بيز الاميل والباسورد وبنشوف هل العمليه نجحت ولا لا
             auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
@@ -62,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
                 } else { // لو حصل اي مشكله بنبعتله رساله بالمشكله اللي حصلت
                     Toast.makeText(
                         this,
-                        "Login failed: ${task.exception?.message}",
+                        "Login failed:please Check your email and password ",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -84,7 +85,7 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         binding.emailLy.error = null
-                        binding.emailLy.helperText = "Reset email sent!" // optional green text
+                        Toast.makeText(this, "email sent!", Toast.LENGTH_SHORT).show() // optional green text
                     } else {
                         binding.emailLy.error = "Error: ${task.exception?.message}"
                     }

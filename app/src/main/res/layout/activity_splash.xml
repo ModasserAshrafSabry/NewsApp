@@ -17,13 +17,14 @@
         tools:visibility="gone"/>
     <TextView
         android:id="@+id/text"
-        android:text="“Your daily news. Fresh. Fast. Reliable.”"
-        android:layout_width="170dp"
+        android:text="“Stay informed. Every story. Every moment.”"
+        android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textStyle="bold"
-        android:textSize="24dp"
+        android:textSize="28dp"
         android:visibility="invisible"
+        android:fontFamily="@font/splashy_bold"
         />
 
     <Button
