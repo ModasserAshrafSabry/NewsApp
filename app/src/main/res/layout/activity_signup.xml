@@ -24,19 +24,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        app:boxBackgroundColor="#EFECEC"
         >
 
 
         <EditText
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/baseline_tag_faces_24"
             android:inputType="text"
             android:id="@+id/name_et"
-            style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#D5D3D3"
-            android:hint="Name..."
+            android:hint="Name"
             android:padding="20dp" />
 
 
@@ -49,17 +51,18 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        app:boxBackgroundColor="#EFECEC"
         >
 
 
         <EditText
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/baseline_email_24"
             android:id="@+id/email_et"
-            style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#D5D3D3"
-            android:hint="Email..."
-
+            android:hint="Email"
             android:padding="20dp" />
 
 
@@ -71,38 +74,41 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        app:boxBackgroundColor="#EFECEC"
         app:passwordToggleEnabled="true">
 
 
         <EditText
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/baseline_lock_open_24"
             android:inputType="textPassword"
             android:id="@+id/pass_et"
-            style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#D5D3D3"
-            android:hint="Password..."
+            android:hint="Password"
             android:padding="20dp" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/confirm_pass_ly"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        app:boxBackgroundColor="#EFECEC"
         app:passwordToggleEnabled="true">
 
 
         <EditText
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/baseline_lock_open_24"
             android:id="@+id/confirm_pass_et"
-            style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#D5D3D3"
             android:hint="Confirm Password"
             android:inputType="textPassword"
             android:padding="20dp" />
