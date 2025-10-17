@@ -13,7 +13,6 @@
         android:layout_height="130dp"
         android:layout_centerInParent="true"
         android:src="@drawable/trendwire"
-        android:text="Hello World!"
         tools:visibility="gone"/>
     <TextView
         android:id="@+id/text"
@@ -28,6 +27,7 @@
         />
 
     <Button
+        android:fontFamily="@font/splashy_bold"
         android:id="@+id/start_btn"
         android:layout_width="300dp"
         android:layout_height="wrap_content"

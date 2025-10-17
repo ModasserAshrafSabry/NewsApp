@@ -36,6 +36,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:fontFamily="@font/splashy_bold"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,6 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"
+                    android:fontFamily="@font/splashy_bold"
                      />
 
 
@@ -91,7 +93,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:fontFamily="@font/splashy_bold"/>
 
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -105,7 +108,8 @@
                 android:layout_marginEnd="20dp"
                 android:text="Forget Password?"
                 android:textColor="#BC3C3C"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/splashy_bold"/>
 
             <Button
                 android:id="@+id/log_btn"
@@ -115,6 +119,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="30dp"
                 android:text="Login"
+                android:fontFamily="@font/splashy_bold"
 
                 />
 
@@ -125,7 +130,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Don't have account yet? sign up!"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/splashy_bold"/>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

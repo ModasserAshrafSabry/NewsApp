@@ -39,7 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
-            android:padding="20dp" />
+            android:padding="20dp"
+            android:fontFamily="@font/splashy_bold"/>
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -63,7 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
-            android:padding="20dp" />
+            android:padding="20dp"
+            android:fontFamily="@font/splashy_bold"/>
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -87,7 +89,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
-            android:padding="20dp" />
+            android:padding="20dp"
+            android:fontFamily="@font/splashy_bold"/>
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -111,13 +114,15 @@
             android:layout_height="wrap_content"
             android:hint="Confirm Password"
             android:inputType="textPassword"
-            android:padding="20dp" />
+            android:padding="20dp"
+            android:fontFamily="@font/splashy_bold"/>
         <Button
             android:id="@+id/nextBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Next"
             android:layout_marginTop="30dp"
+            android:fontFamily="@font/splashy_bold"
             />
 
 
