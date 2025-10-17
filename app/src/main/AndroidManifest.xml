@@ -14,18 +14,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NewsApp"
         android:usesCleartextTraffic="true">
-
-
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".MainActivity"
             android:exported="false" />
@@ -35,12 +35,9 @@
         <activity
             android:name=".FavouritesActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".SettingsActivity"/>
-        <activity
-            android:name=".signUpActivity"/>
-        <activity
-            android:name=".LoginActivity"/>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".signUpActivity" />
+        <activity android:name=".LoginActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
