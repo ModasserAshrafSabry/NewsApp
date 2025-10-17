@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -66,17 +67,33 @@ class SplashActivity : AppCompatActivity() {
                     .start()
             }
         })
-        btn.setOnClickListener {val auth = FirebaseAuth.getInstance()
+        btn.setOnClickListener {
+            val auth = FirebaseAuth.getInstance()
             val currentUser = auth.currentUser
 
             if (currentUser != null) {
-                startActivity(Intent(this, CategoryActivity::class.java))
-            } else {
-                startActivity(Intent(this, LoginActivity::class.java))
-            }
-            finish()
+                Toast.makeText(this, "✅ User found: ${currentUser.email}", Toast.LENGTH_SHORT).show()
 
+                currentUser.reload().addOnCompleteListener { task ->
+                    if (task.isSuccessful && auth.currentUser != null) {
+                        Toast.makeText(this, "✅ User session still valid", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, CategoryActivity::class.java))
+                    } else {
+                        Toast.makeText(this, "❌ User invalid or deleted", Toast.LENGTH_SHORT).show()
+                        auth.signOut()
+                        startActivity(Intent(this, LoginActivity::class.java))
+                    }
+                    finish()
+                }
+            } else {
+                Toast.makeText(this, "❌ No user logged in", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
         }
+
+
+
 
 
     }
