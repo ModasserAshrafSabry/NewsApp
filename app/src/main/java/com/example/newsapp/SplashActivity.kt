@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.DecelerateInterpolator
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -71,27 +70,31 @@ class SplashActivity : AppCompatActivity() {
             val auth = FirebaseAuth.getInstance()
             val currentUser = auth.currentUser
 
-            if (currentUser != null) {
-                Toast.makeText(this, "✅ User found: ${currentUser.email}", Toast.LENGTH_SHORT).show()
+            // Disable the button temporarily to prevent double clicks
+            btn.isEnabled = false
 
+            if (currentUser != null) {
+                // Reload the user to make sure the account still exists
                 currentUser.reload().addOnCompleteListener { task ->
-                    if (task.isSuccessful && auth.currentUser != null) {
-                        Toast.makeText(this, "✅ User session still valid", Toast.LENGTH_SHORT).show()
+                    btn.isEnabled = true // Re-enable the button after reload finishes
+
+                    if (task.isSuccessful) {
+                        // ✅ User is still valid
                         startActivity(Intent(this, CategoryActivity::class.java))
                     } else {
-                        Toast.makeText(this, "❌ User invalid or deleted", Toast.LENGTH_SHORT).show()
+                        // ❌ User no longer exists or session invalid
                         auth.signOut()
                         startActivity(Intent(this, LoginActivity::class.java))
                     }
                     finish()
                 }
             } else {
-                Toast.makeText(this, "❌ No user logged in", Toast.LENGTH_SHORT).show()
+                // ⚠️ No user logged in
+                btn.isEnabled = true
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
         }
-
 
 
 
