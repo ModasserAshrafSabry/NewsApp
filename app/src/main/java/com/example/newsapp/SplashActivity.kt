@@ -66,17 +66,37 @@ class SplashActivity : AppCompatActivity() {
                     .start()
             }
         })
-        btn.setOnClickListener {val auth = FirebaseAuth.getInstance()
+        btn.setOnClickListener {
+            val auth = FirebaseAuth.getInstance()
             val currentUser = auth.currentUser
 
-            if (currentUser != null) {
-                startActivity(Intent(this, CategoryActivity::class.java))
-            } else {
-                startActivity(Intent(this, LoginActivity::class.java))
-            }
-            finish()
+            // Disable the button temporarily to prevent double clicks
+            btn.isEnabled = false
 
+            if (currentUser != null) {
+                // Reload the user to make sure the account still exists
+                currentUser.reload().addOnCompleteListener { task ->
+                    btn.isEnabled = true // Re-enable the button after reload finishes
+
+                    if (task.isSuccessful) {
+                        // ✅ User is still valid
+                        startActivity(Intent(this, CategoryActivity::class.java))
+                    } else {
+                        // ❌ User no longer exists or session invalid
+                        auth.signOut()
+                        startActivity(Intent(this, LoginActivity::class.java))
+                    }
+                    finish()
+                }
+            } else {
+                // ⚠️ No user logged in
+                btn.isEnabled = true
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
         }
+
+
 
 
     }
